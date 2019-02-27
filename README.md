@@ -7,7 +7,7 @@ Express module
 
 Execution:-
 1) $node server.js
-2) Open the link <a href="http://localhost:3000/index.html">http://localhost:3000/index.html</a> in the browser.
+2) Open the link <a href="http://localhost:3000">http://localhost:3000</a> in the browser.
 
 Information:-
 1) There are 3 different forms and a user reference button.
