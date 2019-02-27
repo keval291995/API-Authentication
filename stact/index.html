@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	  <title>Task</title>
+	  <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	  <style>
+	  	form{
+    		background-color: #fff;
+    		padding: 30px;
+    		margin-top:20px;
+    		/*margin-left:auto;
+    		margin-right:auto;*/
+    		box-shadow: 0px 0px 8px 1px #00000014;
+	  	}
+	  	input{
+	  		width:100%;
+	  		margin-bottom:10px;
+	  	}
+	  	#login{
+	  		width:50%;
+	  		margin-left:auto;
+	  		margin-right:auto;
+	  	}
+	  	.refer{
+	  		margin-top:30px;
+	  	}
+	  	table{
+	  		margin:50px 0;
+	  	}
+	  	td,th{
+	  		padding:5px;
+	  		border:1px solid #000;
+	  	}
+	  </style>
+	</head>
+	<body>
+		<div class="container"><div class="row">
+			<div class="col-md-12">
+				<form id="login">
+					<h3 class="text-center">Login User</h3>
+					<label>Email</label>
+					<input type="email" name="email" id="lemail">
+					<label>Password</label>
+					<input type="password" name="password" id="lpass">
+					<button class="a btn btn-primary">login</button>
+				</form>
+			</div>
+			<div class="col-md-6">
+				<form id="create">
+					<h3 class="text-center">Create User</h3>
+					<label>Name</label>
+					<input type="text" name="name" id="cname">
+					<label>Email</label>
+					<input type="email" name="email" id="cemail">
+					<label>Password</label>
+					<input type="password" name="password" id="cpass">
+					<button class="b btn btn-success">create</button>
+				</form>
+			</div>
+			<div class="col-md-6">
+				<form id="reset">
+					<h3 class="text-center">Reset Password</h3>
+					<label>Email</label>
+					<input type="email" name="email" id="remail">
+					<label>Old Password</label>
+					<input type="password" name="password" id="ropass">
+					<label>New Password</label>
+					<input type="password" name="name" id="rnpass">
+					<button class="c btn btn-danger">reset</button>
+				</form>
+			</div>
+		</div>
+		<hr/>
+		<div class="refer">
+			<h4>User details for your reference</h4>
+			<button class="d btn btn-success">Click Here</button>
+			<table></table>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script>
+		$(document).ready(function(){
+
+			//login
+			$(".a").click(function(){
+				var email = $("#lemail").val();
+				var pass = $("#lpass").val();
+				if(email.length!=0){
+					$.ajax({
+						url: 'login?mail='+email+'&pass='+pass,
+					    type: 'GET',
+					}).done(function(res){
+						console.log(res);
+						if(res){
+							$("#login input").val("");
+							alert("Login Success");
+						} else {
+							alert("Login Failed");
+						}
+					});
+					return false;
+				} else {
+					alert("Enter the email");
+					return false;		
+				}
+			});
+
+			//create
+			$(".b").click(function(){
+				var name = $("#cname").val();
+				var email = $("#cemail").val();
+				var pass = $("#cpass").val();
+				if(email.length!=0){
+					$.ajax({
+						url: 'create?name='+name+'&mail='+email+'&pass='+pass,
+					    type: 'POST',
+					}).done(function(res){
+						if(res){
+							$("#create input").val("");
+							alert("User Added");
+						} else {
+							alert("User Already Exists");
+						}
+					});
+					return false;
+				} else {
+					alert("Enter the email");
+					return false;
+				}
+			});
+
+			//reset
+			$(".c").click(function(){
+				var opass = $("#ropass").val();
+				var email = $("#remail").val();
+				var npass = $("#rnpass").val();
+				if(email.length!=0){
+					$.ajax({
+						url: 'reset?mail='+email+'&opass='+opass+'&npass='+npass,
+					    type: 'POST',
+					}).done(function(res){
+						if(res){
+							alert("Password Reset");
+							$("#reset input").val("");
+						} else {
+							alert("Could not reset");
+						}
+					});
+					return false;
+				} else {
+					alert("Enter the email");
+					return false;
+				}
+			});
+
+			//user reference
+			$(".d").click(function(){
+				$.ajax({
+					url: 'refer',
+				    type: 'GET',
+				}).done(function(res){
+						$("table").html("<tr><th>Name</th><th>Email</th><th>Password</th></tr>");
+					$.each(res,function(key,value){
+						$("table").append("<tr><td>"+value.name+"</td><td>"+value.email+"</td><td>"+value.password+"</td></tr>")
+					})
+				});
+				return false;
+			});
+		});
+
+	</script>
+	</body>
+</html>
